@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title> Push Notification </title>
+	<script src="/js/jquery.js"> </script>
+	<script src="/js/jquery-ui.js"> </script>
+	<% if @js %>
+	  <% @js.each do |script| %>
+	    <%= "<script src=\"/js/#{script}.js\"></script>" %>
+	    <!-- within quotes quotes are being used, so they must be escaped-->
+	  <% end %>
+	<% end %>
+	
+	<% if @erbjs %>
+	  <% @erbjs.each do |script| %>
+	    <%= "<script src=\"/js/#{script}.js.erb\"></script>" %>
+	    <!-- within quotes quotes are being used, so they must be escaped-->
+	  <% end %>
+	<% end %>
+  </head>
+
+  <body>
+	<!-- implementation specific here -->
+	<%= yield %>
+  </body>
+</html>
+

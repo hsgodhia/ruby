@@ -1,0 +1,20 @@
+<form action="/user/login/" method="post" style="display:inline" >
+<h3>Please login</h3>
+
+<% if @error %>
+  <%= "<li>#{@error}</li><br/>" %>
+<% end %>
+
+<hr>
+ 
+  <label>Username</label>
+  <input name="login" style="position: fixed; left: 130px;" id="login" placeholder="Enter your login" type="text" /><br/><br/>
+  <label>Password</label>
+  <input name="pwd" style="position: fixed; left: 130px;" id="pwd" maxlength="100" placeholder="Enter your password" type="password" /><br><br/>
+  <input id="send" type="submit" value="Login">
+ 
+</form> 
+
+<form action="/user/signup/" method="get" style="display:inline" >
+  <input id="register" type="submit" value="Signup">
+</form>

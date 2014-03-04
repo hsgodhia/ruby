@@ -1,0 +1,9 @@
+$(document).ready(function()
+{
+ $("#send").click(function(event)
+ {
+//    event.preventDefault();
+    var data = { "login": $("#login").val(), "pwd": $("#pwd").val() };
+    $.post( '/user/validate', data, 'json');
+ });
+});

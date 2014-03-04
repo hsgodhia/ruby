@@ -1,0 +1,14 @@
+$(document).ready(function()
+{
+
+  
+});
+
+var es = new EventSource('/connect');
+alert("I made a request to connect, will connect now shortly");
+//event source accpets the URI of the server which generates data
+es.onmessage = function(e) {
+	var newElement = document.createElement("li");
+	newElement.innerHTML = e.data;
+	eventList.appendChild(newElement);
+}
