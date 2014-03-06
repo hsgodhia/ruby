@@ -1,0 +1,24 @@
+<div class="banner">
+
+  <div class="" style="width: 60%; display: inline-block;">
+    <h1 style="font-size:60px; margin:0px;">Showcase</h1>
+    <h6 style="font-size:30px; margin:0px;">Increase your online presence, showcase your menu of items to connect with more customers.</h6>
+    <br/>
+  </div>
+
+  <div class="" style="width: 40%; float: right;">
+  <img src="/images/Shopify-logo.jpg" style="width:300px;height:auto;">
+  </div>
+  <button style="float:left;" id="home">Home</button>
+</div>
+
+<% if @items %>
+	<% @items.each do |k, v| %>
+		<div class="img">
+	 		<%= 
+	 			"<a target=\"_blank\" href=\"/itm/#{k}\"><img src=\"/images/#{k}\" alt=\"Klematis\" width=\"400\" height=\"400\"></a>"
+	 		%>
+	 	<%= "<div class=\"desc\">#{@items[k]}</div>" %>
+		</div>
+	<% end %>
+<% end %>

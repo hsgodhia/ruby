@@ -1,0 +1,22 @@
+<div style="width:50%; float:left;">
+   	<div class="itm_desc">
+		<h2><%= "#{@item.title}" %></h2>    
+		<img src= <%="/images/#{@item.path}"%> width="400" height="400">
+   	</div>
+	
+	<br/>
+   	<p >This item has been listed and sold by <b><%= "#{@item.login}" %></b> </p>
+
+   	<div class="news">
+   		<p>All the latest <b>news</b> from this store will be displayed here! </p>
+	</div>
+</div>
+
+<div style="float:right; width:50%;">
+	<div class="store_info">
+		<p>Price: <b>$<%="#{@item.price}"%></b></p>
+			<button id="show_price_drop"> Notify </button><br/><br/>
+			<input  id="price_box" placeholder="Your max.." name="user_price" type="text" maxlength="5" size="3">
+			<button id="send"> Let'me know </button>
+    </div>
+</div>

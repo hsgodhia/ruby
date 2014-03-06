@@ -1,5 +1,0 @@
-<div id="wrapper">
-    <input type="text" id="message" placeholder="Enter Notification Here"></input><br>
-    <button id="send">Push</button>
-</div>
-

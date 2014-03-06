@@ -1,0 +1,20 @@
+<div>
+	<div id="new_listing" style="width:50%; float:left;">
+		<p>Add <b>new</b> items to your store.</p>
+		<p>Browse for an image!</p>
+		<form id="listing" method="post" enctype="multipart/form-data">
+			<input type="file" name="myfile"/> <br /><br />
+			<p>Title:   </p><input type="text" name="title" placeholder="Add a caption to your Product.." /> <br/>
+		</form>
+		<p> Description:</p>
+		<textarea rows="4" cols="40" name="description" form="listing"> </textarea>
+		<p><input type="submit"; value="Upload!"/></p> <br/><br />
+
+	</div>
+
+	<div style="width:50%; float:right;">
+	  <p> <b><%= "#{@login}" %></b> Send an instant-message to all Users.</p>
+	  	<input type="text" id="message" placeholder="Enter Notification Here"></input><br>
+      	<button style="position:relative; top:5px" id="send">Send</button>
+	</div>
+</div>
