@@ -1,15 +1,19 @@
-window.onload = function() {
+$(document).ready(function(){
 
-	$("#send").hide();
+	$("#go_back").click(function(event){
+		window.location.href = '/market/showcase';
+	});
+
+	$("#update").hide();
 	$("#price_box").hide();
-	$("#show_price_drop").click(function(event)
+	$("#show_edit").click(function(event)
 	 {
 	    $(this).hide();
-		$("#send").show();
+		$("#update").show();
 		$("#price_box").show();
 	 });
 
-	$("#send").click(function(event){
+	$("#update").click(function(event){
 
 		var str = $("#imagelink").attr("src");
 	 	var price = $("#price_box").val();
@@ -17,7 +21,7 @@ window.onload = function() {
 	 	console.log(str.slice(8));    	
 	 	console.log(price);
 
-	 	var posting = $.post('/pricedrop/notify', { "max_price":  price , "item_path" : str.slice(8) } );
+	 	var posting = $.post('/item/edit', { "new_price":  price , "item_path" : str.slice(8) });
 		
 		posting.done(function(data) { 
 			if (data[0] == "1")
@@ -26,8 +30,4 @@ window.onload = function() {
 				$("#result_negative").html(data.slice(1)); 
 		});
 	});
-
-	$("#go_back").click(function(event){
-		window.location.href = '/market/showcase';
-	});
-}
+});

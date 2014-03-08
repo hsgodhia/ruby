@@ -57,5 +57,22 @@ class Item
   property :created_at, DateTime
 end      
 
+class PriceDrop
+  include DataMapper::Resource
+
+  property :id, Serial
+  property :user_id, Integer, :required => true
+  property :item_path, Integer, :required => true
+  property :item_title, Text, :lazy => false, :required => true
+  property :created_at, DateTime
+
+  property :max_price, Integer
+  property :orignal_price, Integer
+
+  validates_uniqueness_of :user_id, :scope => :item_path
+  #for a given item a User is given only one price drop notification
+
+end
+
 DataMapper.finalize
 DataMapper.auto_upgrade!

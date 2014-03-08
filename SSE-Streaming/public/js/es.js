@@ -21,8 +21,14 @@ window.date = ""
 
 es.onmessage = function(e) {
 	var newElement = document.createElement("li");
-	newElement.innerHTML = e.data;
-	eventList.appendChild(newElement);
+	// sample message {"mssg":"hey man","time":"03:06:55","user":"burberry"}
+	var message = e.data;
+	var arr = message.split(",")
+	var text = arr[0].slice(9, -1);
+	var user = arr[2].slice(8, -2);
+	newElement.innerHTML = text + ", @"+user;
+	$("#eventList").prepend(newElement).slideDown();
+	//eventList.appendChild(newElement);
 
 	var t = e.data.indexOf("time");
 	window.date = e.data.slice(t+7, t+15);
@@ -38,7 +44,8 @@ es.onerror = function(e) {
 
 		var newElement = document.createElement("li");
 		newElement.innerHTML = data;
-		eventList.appendChild(newElement);
+		if (data != "" )
+			$("#eventList").prepend(newElement).slideDown();
     });
     window.bol = false;
 };

@@ -1,7 +1,7 @@
-<div style="width:50%; float:left;">
+<div style="width:40%; float:left; margin-left:25px;">
    	<div class="itm_desc">
 		<h2><%= "#{@item.title}" %></h2>    
-		<img src= <%="/images/#{@item.path}"%> width="400" height="400">
+		<img id="imagelink" src= <%="/images/#{@item.path}"%> width="400" height="400">
    	</div>
 	
 	<br/>
@@ -12,11 +12,32 @@
 	</div>
 </div>
 
-<div style="float:right; width:50%;">
+<div style="float:left; width:50%; margin-left:25px;">
 	<div class="store_info">
 		<p>Price: <b>$<%="#{@item.price}"%></b></p>
-			<button id="show_price_drop"> Notify </button><br/><br/>
-			<input  id="price_box" placeholder="Your max.." name="user_price" type="text" maxlength="5" size="3">
-			<button id="send"> Let'me know </button>
+
+			<% if !@isSeller %>
+				<button class="pure-button pure-button-primary" id="show_price_drop"> Notify </button><br/><br/>
+				<input id="price_box" placeholder="Your max.." name="user_price" type="text" maxlength="5" size="9">
+				<button class="pure-button pure-button-primary" id="send"> Let'me know </button>
+
+				<div style="margin-top: 10px; list-style: none; width: 70%;">
+					<li style="background-color: #A9F5A9;" id="result_positive"></li>
+					<li style="background-color: lavenderblush;" id="result_negative"></li>
+	      		</div>
+	      	<% else %>
+	      		<button class="pure-button pure-button-primary" id="show_edit"> Edit </button><br/><br/>
+				<input id="price_box" placeholder="New price.." name="new_price" type="text" maxlength="5" size="9">
+				<button class="pure-button pure-button-primary" id="update"> Update </button>
+				<div style="margin-top: 10px; list-style: none; width: 70%;">
+					<li style="background-color: #A9F5A9;" id="result_positive"></li>
+					<li style="background-color: lavenderblush;" id="result_negative"></li>
+	      		</div>
+	      	<% end %>
+
     </div>
+</div>
+
+<div style="width:10%; float:right;">
+	<button class="pure-button pure-button-primary" id="go_back">Back</button>
 </div>

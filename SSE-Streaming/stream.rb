@@ -19,7 +19,15 @@ $conns_alive = {}
 
 get '/itm/:id' do
   @item = Item.first(:path => params[:id])
-  @js = ["listing"]
+  redirect '/user/login' if session[:id].nil?
+
+  #confirm user logged in is the owner of the item
+  if @item.login.eql?(User.first(:id => session[:id]).login)
+    @isSeller = true
+    @js = ["seller_listing"]
+  else
+    @js = ["listing"]
+  end
   erb :listing
 end
 
@@ -66,7 +74,41 @@ end
 
 #------------------------------------
 #this is the end for the market, showcase
+#Implementing the price drop notification here
 
+post '/pricedrop/notify' do
+  it = Item.first(:path => params[:item_path].to_i)
+  pd = PriceDrop.new
+  pd.attributes = { :item_path => it.path, :item_title => it.title, :user_id => session[:id], :max_price => params[:max_price].to_i , :orignal_price => it.price }
+  
+  if pd.save
+    "1You will be notified when this item cost below " + params[:max_price] 
+  else
+    "0You have already subscribed for this price drop event"
+  end
+end
+
+post '/item/edit' do
+  #editing the orignal price of the item in the parent Item table
+  it = Item.first(:path => params[:item_path].to_i)
+  bool1 = it.update(:price => params[:new_price].to_i)
+
+  #editing all the records of the PriceDrop table 
+  bool2 = true
+  PriceDrop.all(:item_path => it.path).each do |pd|
+    bool2 = bool2 and pd.update(:orignal_price => params[:new_price].to_i)
+    #here logic can also be added to check if condition is satisfied and accordingly create a Notif object and send realtime message
+  end
+
+  if bool1 and bool2
+    "1Item updated, buyer's notified of new price!"
+  else
+    "0Unable to update please trye later"
+  end
+end
+
+
+#-------------------------------------------------
 get '/clear' do
   session.clear
   redirect '/user/login'
@@ -113,15 +155,33 @@ get '/:login' do
   if @login.eql?(u.login)
     @users = User.all(:id.not => session[:id])
     @owner = true
+    #used to display the carouel that is present at the base of the page
+    @items = {}
+    Item.all.each do |itm|
+      @items[itm.path] = itm.title
+    end
+
     #calculate all the latest notifs from my followers and display them here
     following = []
     Followers.all(:user_id => session[:id]).each do |f|
       following << f.follower_id
     end
     @notifs = []
-    Notif.all(:owner_id => following, :order => [:created_at.desc], :limit => 6 ).each do |t|  
+    Notif.all(:owner_id => following, :order => [:created_at.desc], :limit => 15 ).each do |t|  
       @notifs << t.notification
     end
+
+    @price_drop_title = []
+    @price_drop_price = []
+    @price_drop_path = []
+
+    #determine all the price-drop true cases and display them here
+    PriceDrop.all(:user_id => session[:id], :conditions => ['max_price >= orignal_price'], :order => [:created_at.desc], :limit => 10).each do |pd|
+      @price_drop_title << pd.item_title
+      @price_drop_price << pd.orignal_price.to_s
+      @price_drop_path << pd.item_path
+    end
+
   end
   erb :home
 end
@@ -196,6 +256,7 @@ notifications = []
 	
 get '/updates/:id', provides: 'text/event-stream' do
   cache_control :no_cache
+  response.headers['Connection'] = 'keep-alive'
   stream :keep_open do |out|
     $conns_alive[params[:id].to_i] = out
     out.callback { $conns_alive[params[:id].to_i] = nil }
@@ -210,8 +271,11 @@ end
 #with any post request data is sent, this is by default stored in the hash "params"
 post '/push' do
   print "User: ", session[:id], "wants to send a message.\n"
-  name = User.first(:id => session[:id]).login
+  u = User.first(:id => session[:id])
+  name = u.login
+  is_seller = u.isSeller
   text = params[:mssg]+", @"+name
+
   note = Notif.new
   note.attributes = { :notification => text, :owner_id => session[:id] }
   note.save

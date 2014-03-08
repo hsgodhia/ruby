@@ -1,103 +1,192 @@
 <div id="user_id" style="display:none;"><%="#{@id}"%></div>
+<style>
+    
+    .feed li
+    {
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+      border-bottom:3px solid #eee; padding:13px;
+      background-color: #FCFCF3;
+    }
+    
+    p, #new_listing, #result
+    {
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    }
+    
+    .feed li:hover 
+    {
+
+      background-color: #ECF1EF;
+    }
+
+    #people_list li
+    {
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+      padding:5px;
+    }
+    
+    ul
+    {
+      margin:0px; padding:0px; list-style-type:none; overflow-y: auto; 
+    }
+    #drop_price
+    {
+      background-color: #A9F5A9;
+    }
+
+    a
+    {
+      color:#0000FF;
+    }
+</style>
+
 <%if @isSeller %>
-  
-  <% if @uploadmessage %>
-    <li> <b> Successfully </b> added item/product to your catlog. </li>
-  <% end %>
 
   <div>
-    <div id="new_listing" style="width:40%; float:left;">
+    <div id="new_listing" style="width:40%; float:left; margin-left:20px;">
+      <div style="margin-top: 10px; background-color: lavenderblush; list-style: none; width: 70%;">
+        <% if @uploadmessage %>
+          <li> <b> Successfully </b> added item/product to your catlog. </li>
+        <% end %>
+      </div>
       <p>Add <b>new</b> items to your store.</p>
       <p>Browse for an image!</p>
-      <form action="/upload" id="listing" method="post" enctype="multipart/form-data">
-        <input type="file" name="myfile"/> <br /><br />
-        Title:  <input type="text" name="title" placeholder="Add a caption to your Product.." /> <br/>
-        <!-- remove this if you want description
-        <p> Description:</p>
-        <textarea rows="4" cols="40" name="description" form="listing"> </textarea>
-        -->
-       Price: <input type="text" name="price" placeholder="Enter an Integeral Price.." />
-               <p><input id = "fileupload" type="submit"; value="Upload!"/></p> <br/><br />
 
+      <form class="pure-form pure-form-aligned" action="/upload" id="listing" method="post" enctype="multipart/form-data">
+      <fieldset>
+
+          <div class="pure-control-group">
+            <input type="file" name="myfile"/>
+          </div>
+
+          
+          <div class="pure-control-group">
+            <label>Title</label>
+            <input type="text" name="title" placeholder="Caption for your Product.." /> 
+          </div>
+          
+          <div class="pure-control-group">
+            <label>Price</label>
+            <input type="text" name="price" placeholder="Enter an Integeral Price.." />
+          </div>
+
+          <div class="pure-control-group">
+            <input class="pure-button pure-button-primary" id = "fileupload" type="submit"; value="Upload!"/>  
+          </div>
+
+      </fieldset>
       </form>
     </div>
 
-    <div style="width:40%; float:left;">
+    <div style="width:30%; float:left;">
       <p> <b><%= "#{@login}" %></b> Send an instant-message to all your customers</p>
-        <input type="text" id="message" placeholder="Enter Notification Here"></input><br>
-          <button style="position:relative; top:5px" id="send">Send</button>
+      <form class="pure-form">
+        <fieldset>
+          <input type="text" id="message" placeholder="Enter Notification Here"></input><br>
+        </fieldset>
+      </form>
+      <button class="pure-button pure-button-primary" style="position:relative; top:5px" id="send">Send</button>
     </div>
-  <button style="width:10%; float:left;" id="logout">Logout</button>
-  <button style="width:10%; float:left;" id="showcase">Showcase</button>
+  
+    <div style="margin-top:10px; margin-left:35px;width:10%; float:left;"><button class="pure-button pure-button-primary" id="logout">Logout</button></div>
+    <div style="margin-top:10px; width:10%; float:left;"><button class="pure-button pure-button-primary" id="showcase">Showcase</button></div>
+
   </div>
 <% else %>
+
 <!-- This marks the end of the rendering of the template for a seller -->
 <!-- #################################################################-->
-  <% if @owner then%>
-    <p style="position:relative; top:15px" > <b><%= "#{@login}" %></b>, push a message to your followers </p>
-  <% else %>
-    <p> To get updates from <b id="user_name"><%="#{@login}" %></b> </p>
-      <button id="follow">Follow </button>
-      <button id="back">Back </button>
-    <div style="position:relative; top:15px" id="result"></div>
+
+  <% if !@owner then%>
+    <div style="margin-left:15px;">
+      <p> To get updates from <b id="user_name"><%="#{@login}" %></b> </p>
+        <button class="pure-button pure-button-primary" id="follow">Follow </button>
+        <button class="pure-button pure-button-primary" id="back">Back </button>
+      <div style="position:relative; top:15px" id="result"></div>
+    </div>
   <% end %>  
 
-  <style>
-      table {
-      border-collapse: collapse;
-      border-spacing: 0;
-      position:fixed;
-      top:10px;
-      right:150px;
-      }
-      th, td {
-      border-bottom: 1px solid #c6c9cc;
-      padding: 15px; 
-      }
-      tr:last-child td {
-      border: 0;
-      }
-  </style>
+
+
+<!-- #################################################################-->
+<!-- This marks the end of the home page of a 3rd person follower/store owner-->
+
 
   <% if @owner %>
-  <div id="wrapper">
-  <p>Server notification's will be logged below. </p>
-  <ul id="eventList">
-  </ul>
-</div>
-    <table style="width:50%">
-      
-      <tr >
-        <th style="width:50%" id="price_drops"> Price Drops</th>
-        <th style="width:50%" id="new_releases"> New Releases</th>
-      </tr>
-      <% if @notifs %>
-        <% @notifs.each do |n| %>
-          <tr>
-            <td><%= "#{n}" %></td>
-          </tr>
-        <% end %>
-      <% end %>
-    </table>
+    <div> 
+      <div id="row1" style="width:100%; display:inline-block;">
+        
+        <div id="push_message" style="
+padding-left: 15px;box-sizing:border-box;
+-moz-box-sizing:border-box; padding-right:18px; width:33%; float:left;">
+<p>hii <b><%= "#{@login}"%></b></p>
+<p> <b>Shoutout!</b> to all your <b>friends</b> and <b>subscribers</b> </p>
+          <input type="text" id="message" placeholder="Enter Notification Here"></input>
+          <button class="pure-button pure-button-primary" id="send" >Push</button>
+          <br /><br />
+          <button class="pure-button pure-button-primary" id="showcase">Showcase</button>
 
-    <div id="reccomendations">
-      <p style="position:absolute; top:455px; left:590px"> <b> Recommendation's </b> from your network </p>
-    </div>
+          <button class="pure-button pure-button-primary" id="logout">Logout</button>
+          
+          <br/><br/><br/><br/>
+          <p> Follow <b>Stores and Friends</b>, to recieve real-time updates</p>
+          <ul id="people_list">
+            <% @users.each do |u| %>
+              <li> <a href="/<%="#{u.login}"%>" > <%= "#{u.login}" %> </a></li>
+            <% end %>
+          </ul>
 
-    <div style="position:relative; top:10px" id="wrapper">
-        <input type="text" id="message" placeholder="Enter Notification Here"></input><br>
-        <button style="position:relative; top:5px" id="send">Push</button>
-        <button style="position:absolute; top:-30px; left:380px; " id="logout">Logout</button>
-    </div>
-    
-    <div style="position:relative; top:100px">
-      <p> Follow <b>Stores and Friends</b>, to recieve real-time updates</p>
-      <ul>
-      <% @users.each do |u| %>
-        <li> <a href="/<%="#{u.login}"%>" > <%= "#{u.login}" %> </li>
-      <% end %>
-      </ul>
+        </div>
+
+        <div id="friends_news_feed" style="box-sizing:border-box;
+-moz-box-sizing:border-box; padding-right:18px; width:33%;float:left;">
+          <p><b>Trend's</b> and <b>New's</b> from your <b>friends</b> and <b>store's</b></p>
+          <ul class="feed" id="eventList" style="border: 1px solid #eee;height: 400px;">
+              <% if @notifs %>
+                <% @notifs.each do |n| %>
+                  <li ><%= "#{n}" %></li>
+                <% end %>
+              <% end %>
+          </ul>
+        </div>
+
+        <div id="stores_news_feed" style="width:33%; float:left;">
+          <p>Seller <b>New Releases</b> and <b>Price Drop</b> Event's </p>
+              <% if @price_drop_title %>
+                <ul class="price_drops" >
+                  <% for i in 0...@price_drop_title.length %>
+<li style="padding:13px; background-color:#FCFCF3;">
+  <%="<a href=\"/itm/#{@price_drop_path[i]}\">#{@price_drop_title[i]}</a>"%> <b>costs only </b><label id="drop_price"><%="#{@price_drop_price[i]}"%></label>
+</li>
+                  <% end %>
+                </ul>
+              <% end %>
+        </div>
+
+      </div>
+      <div id="row2">
+        <div id="followers_list" style="width:33%;float:left;">
+        </div>
+        <div id="recommendation_prod" style="margin-left:470px;width:67%;float:left;">
+          <p> <b> Recommendation's </b> from your network </p>
+            <div style="float:left;">
+            <% if @items %>
+              <% i = 0 %>
+              <% @items.each do |k, v| %>
+                  <%= 
+                    "<a href=\"/itm/#{k}\"><img style=\"opacity: 1; display: inline-block;\" src=\"/images/#{k}\" width=\"200\" height=\"200\"></a>"
+                  %>
+                  <% break if i > 2 %>
+                  <% i += 1 %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
     </div>
   <% end %>
+
+
+<!-- This end is for the seller vs buyer-->  
 <% end %>
 

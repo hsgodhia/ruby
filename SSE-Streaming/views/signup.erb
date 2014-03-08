@@ -1,26 +1,36 @@
-<div>
-<form method="post" action="/user/signup/">
-<h3>Signup here!</h3>
+<h3 style="margin-left:25px">Signup here!</h3>
 
+<div style="margin-left:25px">
 <% if @error %>
   <% @error.each do |e| %>
   <%= "<li>#{e}</li>" %>
   <% end %>
   <br/>
 <% end %>
+</div>
 
-<hr>
-<label> Login</label><br>
-<input id="login" name="login" maxlength="40" placeholder="Login username" type="text"/><br><br>
-<label>Name</label><br>
-<input name="name" maxlength="40" placeholder="Name" type="text"/><br><br>
-<label>Password</label><br>
-<input name="pwd" maxlength="100" placeholder="Enter a Password ..." type="password"/> <br><br>
-<label>Email</label><br>
-<input style="text-transform: lowercase; id="email" name="email" maxlength="40" 
-placeholder="Email" type="text"/><br /><br/>
-<input type="checkbox" name="isSeller" value="true"/><b>Seller/Store</b> Account?<br/><br/>   
-<input type="submit" value="Signup" name="submit">
+<hr style="width:17%; margin-left:25px;">
+<div style="margin-left:25px;">
+<form class="pure-form pure-form-stacked" method="post" action="/user/signup/">
+<fieldset>
+	<label > Login</label>
+	<input id="login" name="login" maxlength="40" placeholder="Login username" type="text"/>
+	<br>
+	<label>Name</label>
+	<input name="name" maxlength="40" placeholder="Name" type="text"/>
+	<br>
+	<label>Password</label>
+	<input name="pwd" maxlength="100" placeholder="Enter a Password ..." type="password"/> 
+	<br>
+	<label>Email</label>
+	<input style="text-transform: lowercase;" id="email" name="email" maxlength="40" 
+	placeholder="Email" type="text"/>
+	<br/>
+	<label for="remember" class="pure-checkbox">
+        <input name="isSeller" value="true" type="checkbox"> <b>Seller/Store</b> Account?
+    </label>
 
+	<input class="pure-button pure-button-primary" type="submit" value="Signup" name="submit">
+</fieldset>
 </form>
 </div>

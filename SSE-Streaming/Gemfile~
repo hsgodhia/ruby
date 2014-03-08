@@ -4,5 +4,5 @@ gem 'json'
 gem 'sinatra'
 gem 'rubygems'
 gem 'data_mapper'
-gem 'sinatra/flash', '0.3.0'
+gem 'sinatra/flash'
 
