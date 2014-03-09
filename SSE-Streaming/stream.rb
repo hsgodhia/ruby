@@ -149,6 +149,11 @@ get '/:login' do
   redirect '/user/signup/' if User.first(:login => params[:login]).nil?
   u = User.first(:id => session[:id])
   @isSeller = u.isSeller
+  
+  if @isSeller 
+    @allitems = Item.all(:login => u.login)
+  end
+
   @uploadmessage = session[:success] if !session[:success].nil?
   session[:success] = nil
 
@@ -258,6 +263,7 @@ get '/updates/:id', provides: 'text/event-stream' do
   cache_control :no_cache
   response.headers['Connection'] = 'keep-alive'
   stream :keep_open do |out|
+    EventMachine::PeriodicTimer.new(20) { out << "data: \n\n" } # required, otherwise the connection is closed in 30-60 sec
     $conns_alive[params[:id].to_i] = out
     out.callback { $conns_alive[params[:id].to_i] = nil }
 

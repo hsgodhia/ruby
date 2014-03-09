@@ -92,6 +92,17 @@
     <div style="margin-top:10px; width:10%; float:left;"><button class="pure-button pure-button-primary" id="showcase">Showcase</button></div>
 
   </div>
+
+  <div style="width:100%; float:left; margin-left:25px;">
+    <p> Item's which you are <b>selling</b> </p>
+      <% if @allitems %>
+        <ul>
+          <% @allitems.each do |it| %>
+            <li style="padding:13px; background-color:#FCFCF3;"><%="<a href=\"/itm/#{it.path}\">#{it.title}</a>"%> </li>
+          <% end %>
+      <% end %>
+      </ul>
+  </div>
 <% else %>
 
 <!-- This marks the end of the rendering of the template for a seller -->
@@ -121,9 +132,15 @@ padding-left: 15px;box-sizing:border-box;
 -moz-box-sizing:border-box; padding-right:18px; width:33%; float:left;">
 <p>hii <b><%= "#{@login}"%></b></p>
 <p> <b>Shoutout!</b> to all your <b>friends</b> and <b>subscribers</b> </p>
-          <input type="text" id="message" placeholder="Enter Notification Here"></input>
-          <button class="pure-button pure-button-primary" id="send" >Push</button>
-          <br /><br />
+
+<form class="pure-form">
+
+    <fieldset>
+        <input id="message" type="text" placeholder="Enter Notification Here"></input>
+                  <button class="pure-button pure-button-primary" id="send" >Push</button>
+    </fieldset>
+
+</form>
           <button class="pure-button pure-button-primary" id="showcase">Showcase</button>
 
           <button class="pure-button pure-button-primary" id="logout">Logout</button>
@@ -156,7 +173,7 @@ padding-left: 15px;box-sizing:border-box;
                 <ul class="price_drops" >
                   <% for i in 0...@price_drop_title.length %>
 <li style="padding:13px; background-color:#FCFCF3;">
-  <%="<a href=\"/itm/#{@price_drop_path[i]}\">#{@price_drop_title[i]}</a>"%> <b>costs only </b><label id="drop_price"><%="#{@price_drop_price[i]}"%></label>
+  <%="<a href=\"/itm/#{@price_drop_path[i]}\">#{@price_drop_title[i]}</a>"%> <b>costs only </b><label id="drop_price">$<%="#{@price_drop_price[i]}"%></label>
 </li>
                   <% end %>
                 </ul>
